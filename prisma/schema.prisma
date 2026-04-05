@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  OPERACIONAL
+}
+
+enum MovementType {
+  ENTRADA
+  SAIDA
+}
+
+model User {
+  id           String   @id @default(cuid())
+  nome         String
+  email        String   @unique
+  senha        String
+  role         UserRole @default(OPERACIONAL)
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  movimentacoes StockMovement[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  nome          String
+  sku           String   @unique
+  descricao     String?
+  categoria     String
+  quantidade    Int      @default(0)
+  estoqueMinimo Int      @default(5) @map("estoque_minimo")
+  preco         Float
+  ativo         Boolean  @default(true)
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  movimentacoes StockMovement[]
+
+  @@map("products")
+}
+
+model StockMovement {
+  id         String       @id @default(cuid())
+  tipo       MovementType
+  quantidade Int
+  observacao String?
+  criadoEm   DateTime     @default(now()) @map("criado_em")
+
+  produtoId String  @map("produto_id")
+  produto   Product @relation(fields: [produtoId], references: [id])
+
+  usuarioId String @map("usuario_id")
+  usuario   User   @relation(fields: [usuarioId], references: [id])
+
+  @@map("stock_movements")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  acao       String
+  entidade   String
+  entidadeId String?  @map("entidade_id")
+  detalhes   String?
+  criadoEm   DateTime @default(now()) @map("criado_em")
+
+  usuarioId String @map("usuario_id")
+  usuario   User   @relation(fields: [usuarioId], references: [id])
+
+  @@map("audit_logs")
+}
