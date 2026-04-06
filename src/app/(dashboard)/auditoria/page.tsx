@@ -39,6 +39,16 @@ export default function AuditoriaPage() {
     const [totalPaginas, setTotalPaginas] = useState(1);
 
     useEffect(() => {
+        // Proteção: OPERACIONAL não tem acesso
+        const dados = localStorage.getItem("usuario");
+        if (dados) {
+            const usuario = JSON.parse(dados);
+            if (usuario.role !== "GERENTE") {
+                window.location.href = "/";
+                return;
+            }
+        }
+
         carregarLogs();
     }, [pagina]);
 

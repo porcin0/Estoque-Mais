@@ -15,32 +15,39 @@ import {
     LogOut,
 } from "lucide-react";
 
-const links = [
-    { href: "/", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/produtos", label: "Produtos", icon: Package },
-    { href: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight },
-    { href: "/usuarios", label: "Usuários", icon: Users },
-    { href: "/relatorios", label: "Relatórios", icon: FileText },
-    { href: "/auditoria", label: "Auditoria", icon: Shield },
+const allLinks = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, gerenteOnly: false },
+    { href: "/produtos", label: "Produtos", icon: Package, gerenteOnly: false },
+    { href: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight, gerenteOnly: false },
+    { href: "/usuarios", label: "Usuários", icon: Users, gerenteOnly: true },
+    { href: "/relatorios", label: "Relatórios", icon: FileText, gerenteOnly: false },
+    { href: "/auditoria", label: "Auditoria", icon: Shield, gerenteOnly: true },
 ];
 
 export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const [nomeUsuario, setNomeUsuario] = useState("");
+    const [userRole, setUserRole] = useState("");
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         const dados = localStorage.getItem("usuario");
         if (dados) {
             const usuario = JSON.parse(dados);
             setNomeUsuario(usuario.nome || "");
+            setUserRole(usuario.role || "");
         }
+        setMounted(true);
     }, []);
 
     function handleLogout() {
         localStorage.removeItem("usuario");
         router.push("/login");
     }
+
+    const isGerente = userRole === "GERENTE";
+    const links = mounted ? allLinks.filter((link) => !link.gerenteOnly || isGerente) : allLinks;
 
     return (
         <aside className="w-60 bg-gray-900 text-white flex flex-col min-h-screen fixed left-0 top-0">
@@ -59,8 +66,8 @@ export default function Sidebar() {
             <nav className="flex-1 px-3 py-4 space-y-1">
                 {links.map((link) => {
                     const isActive =
-                        link.href === "/"
-                            ? pathname === "/"
+                        link.href === "/dashboard"
+                            ? pathname === "/dashboard"
                             : pathname.startsWith(link.href);
                     const Icon = link.icon;
 

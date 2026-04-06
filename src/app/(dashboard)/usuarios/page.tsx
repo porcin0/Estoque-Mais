@@ -19,6 +19,16 @@ export default function UsuariosPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Proteção: OPERACIONAL não tem acesso
+        const dados = localStorage.getItem("usuario");
+        if (dados) {
+            const usuario = JSON.parse(dados);
+            if (usuario.role !== "GERENTE") {
+                window.location.href = "/";
+                return;
+            }
+        }
+
         fetch("/api/usuarios")
             .then((res) => res.json())
             .then(setUsuarios)
@@ -84,8 +94,8 @@ export default function UsuariosPage() {
                                         <td className="px-4 py-3 text-center">
                                             <span
                                                 className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${user.role === "ADMIN"
-                                                        ? "bg-primary-50 text-primary-600"
-                                                        : "bg-gray-100 text-gray-600"
+                                                    ? "bg-primary-50 text-primary-600"
+                                                    : "bg-gray-100 text-gray-600"
                                                     }`}
                                             >
                                                 {user.role === "ADMIN" ? "Gerente" : "Operacional"}
@@ -94,8 +104,8 @@ export default function UsuariosPage() {
                                         <td className="px-4 py-3 text-center">
                                             <span
                                                 className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${user.ativo
-                                                        ? "bg-success-50 text-success-600"
-                                                        : "bg-gray-100 text-gray-500"
+                                                    ? "bg-success-50 text-success-600"
+                                                    : "bg-gray-100 text-gray-500"
                                                     }`}
                                             >
                                                 {user.ativo ? "Ativo" : "Inativo"}
@@ -108,8 +118,8 @@ export default function UsuariosPage() {
                                             <button
                                                 onClick={() => toggleAtivo(user.id, user.ativo)}
                                                 className={`p-1.5 rounded transition-colors ${user.ativo
-                                                        ? "text-gray-400 hover:text-danger-600 hover:bg-danger-50"
-                                                        : "text-gray-400 hover:text-success-600 hover:bg-success-50"
+                                                    ? "text-gray-400 hover:text-danger-600 hover:bg-danger-50"
+                                                    : "text-gray-400 hover:text-success-600 hover:bg-success-50"
                                                     }`}
                                                 title={user.ativo ? "Desativar" : "Ativar"}
                                             >

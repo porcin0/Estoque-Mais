@@ -32,7 +32,7 @@ export default function LoginPage() {
 
             // Salva os dados do usuário no localStorage
             localStorage.setItem("usuario", JSON.stringify(data));
-            router.push("/");
+            router.push("/dashboard");
         } catch {
             setErro("Erro de conexão com o servidor");
         } finally {

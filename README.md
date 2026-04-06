@@ -23,7 +23,7 @@ Sistema web de controle de estoque para comércio, desenvolvido como projeto aca
 ```bash
 # Clonar o repositório
 git clone <url-do-repositorio>
-cd projeto-prat-prof-ads
+cd Estoque+
 
 # Instalar dependências
 npm install

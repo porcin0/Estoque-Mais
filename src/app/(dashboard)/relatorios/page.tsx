@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/header";
 import { Download, FileText, ArrowLeftRight } from "lucide-react";
 
 export default function RelatoriosPage() {
     const [loading, setLoading] = useState<string | null>(null);
     const [erro, setErro] = useState("");
+    const [isGerente, setIsGerente] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        const dados = localStorage.getItem("usuario");
+        if (dados) {
+            const usuario = JSON.parse(dados);
+            setIsGerente(usuario.role === "GERENTE");
+        }
+        setMounted(true);
+    }, []);
 
     function downloadCSV(conteudo: string, nomeArquivo: string) {
         // Adicionar BOM para UTF-8 no Excel
@@ -117,33 +128,35 @@ export default function RelatoriosPage() {
                     </button>
                 </div>
 
-                {/* Card Movimentações */}
-                <div className="bg-white rounded-lg border border-gray-200 p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2.5 bg-warning-50 text-warning-600 rounded-lg">
-                            <ArrowLeftRight className="w-5 h-5" />
+                {/* Card Movimentações — apenas para gerente */}
+                {(!mounted || isGerente) && (
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2.5 bg-warning-50 text-warning-600 rounded-lg">
+                                <ArrowLeftRight className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h2 className="text-base font-semibold text-gray-900">Movimentações</h2>
+                                <p className="text-xs text-gray-500">
+                                    Histórico completo de entradas e saídas
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 className="text-base font-semibold text-gray-900">Movimentações</h2>
-                            <p className="text-xs text-gray-500">
-                                Histórico completo de entradas e saídas
-                            </p>
-                        </div>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-4">
-                        Exporta data, tipo, produto, quantidade, responsável e observação
-                        de todas as movimentações.
-                    </p>
-                    <button
-                        onClick={exportarMovimentacoes}
-                        disabled={loading === "movimentacoes"}
-                        className="flex items-center gap-2 w-full justify-center bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium
+                        <p className="text-sm text-gray-600 mb-4">
+                            Exporta data, tipo, produto, quantidade, responsável e observação
+                            de todas as movimentações.
+                        </p>
+                        <button
+                            onClick={exportarMovimentacoes}
+                            disabled={loading === "movimentacoes"}
+                            className="flex items-center gap-2 w-full justify-center bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium
               hover:bg-primary-700 disabled:opacity-50 transition-colors"
-                    >
-                        <Download className="w-4 h-4" />
-                        {loading === "movimentacoes" ? "Exportando..." : "Exportar CSV"}
-                    </button>
-                </div>
+                        >
+                            <Download className="w-4 h-4" />
+                            {loading === "movimentacoes" ? "Exportando..." : "Exportar CSV"}
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );
