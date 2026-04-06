@@ -91,8 +91,8 @@ export default function ProdutosPage() {
             {mensagem && (
                 <div
                     className={`mb-4 px-4 py-3 rounded-md text-sm ${mensagem.tipo === "sucesso"
-                            ? "bg-success-50 text-success-600"
-                            : "bg-danger-50 text-danger-600"
+                        ? "bg-success-50 text-success-600"
+                        : "bg-danger-50 text-danger-600"
                         }`}
                 >
                     {mensagem.texto}
@@ -143,7 +143,9 @@ export default function ProdutosPage() {
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-medium text-gray-900">{produto.nome}</span>
                                                     {estoqueBaixo && (
-                                                        <AlertTriangle className="w-4 h-4 text-danger-500" title="Estoque abaixo do mínimo" />
+                                                        <span title="Estoque abaixo do mínimo">
+                                                            <AlertTriangle className="w-4 h-4 text-danger-500" />
+                                                        </span>
                                                     )}
                                                 </div>
                                             </td>
@@ -161,8 +163,8 @@ export default function ProdutosPage() {
                                             <td className="px-4 py-3 text-center">
                                                 <span
                                                     className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${produto.ativo
-                                                            ? "bg-success-50 text-success-600"
-                                                            : "bg-gray-100 text-gray-500"
+                                                        ? "bg-success-50 text-success-600"
+                                                        : "bg-gray-100 text-gray-500"
                                                         }`}
                                                 >
                                                     {produto.ativo ? "Ativo" : "Inativo"}
