@@ -14,7 +14,7 @@ export default function RelatoriosPage() {
         const dados = localStorage.getItem("usuario");
         if (dados) {
             const usuario = JSON.parse(dados);
-            setIsGerente(usuario.role === "GERENTE");
+            setIsGerente(usuario.role === "ADMIN");
         }
         setMounted(true);
     }, []);

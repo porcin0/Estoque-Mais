@@ -46,7 +46,7 @@ export default function Sidebar() {
         router.push("/login");
     }
 
-    const isGerente = userRole === "GERENTE";
+    const isGerente = userRole === "ADMIN";
     const links = mounted ? allLinks.filter((link) => !link.gerenteOnly || isGerente) : allLinks;
 
     return (

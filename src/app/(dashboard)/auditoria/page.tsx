@@ -43,7 +43,7 @@ export default function AuditoriaPage() {
         const dados = localStorage.getItem("usuario");
         if (dados) {
             const usuario = JSON.parse(dados);
-            if (usuario.role !== "GERENTE") {
+            if (usuario.role !== "ADMIN") {
                 window.location.href = "/";
                 return;
             }

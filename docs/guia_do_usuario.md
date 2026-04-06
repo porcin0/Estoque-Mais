@@ -1,126 +1,102 @@
 # Guia do Usuário — Estoque+
 
-## O que é o Estoque+
+O **Estoque+** é uma solução moderna e intuitiva para o gerenciamento de inventário, projetada para facilitar o controle de entradas, saídas e monitoramento de produtos em tempo real.
 
-O Estoque+ é um sistema web de controle de estoque para comércio. Ele permite cadastrar produtos, registrar entradas e saídas, acompanhar o nível de estoque e gerar relatórios.
+---
 
-O sistema tem dois perfis de acesso com permissões diferentes.
+## 1. Como Acessar a Aplicação
 
-## Como acessar
+Pode ser acessada de duas formas:
 
-Abra o navegador e acesse o endereço do sistema (em desenvolvimento local: `http://localhost:3000/login`).
+### 1.1. Versão Online (Recomendado)
+A aplicação está hospedada na Vercel e pode ser acessada diretamente pelo navegador:
+> **URL:** [https://estoque-mais-porcin0.vercel.app/](https://estoque-mais-porcin0.vercel.app/)
 
-Você será direcionado para a tela de login.
+### 1.2. Instalação Local (Para Avaliação Técnica)
+Caso deseje rodar a aplicação em sua própria máquina, siga os passos abaixo:
 
-## Login
+1.  **Pré-requisitos**: Ter o [Node.js](https://nodejs.org/) (v20+) instalado.
+2.  **Clone o Repositório**:
+    ```bash
+    git clone https://github.com/porcin0/Estoque-Mais.git
+    cd Estoque-Mais
+    ```
+3.  **Instale as Dependências**:
+    ```bash
+    npm install
+    ```
+4.  **Configure as Variáveis de Ambiente**:
+    Crie um arquivo `.env` na raiz do projeto com a URL do banco de dados PostgreSQL (fale com o administrador para obter a `DATABASE_URL`).
+5.  **Inicie o Servidor**:
+    ```bash
+    npm run dev
+    ```
+6.  **Acesse**: `http://localhost:3000`
 
-Informe seu e-mail e senha para entrar no sistema. Após autenticação, você será direcionado ao Dashboard.
+---
 
-Credenciais de demonstração:
+## 2. Primeiros Passos: Login e Segurança
 
-- **Gerente:** admin@estoqueplus.com / admin123
-- **Operacional:** operador@estoqueplus.com / operador123
+Ao acessar o sistema, você verá a tela de autenticação. O **Estoque+** utiliza um sistema de **Controle de Acesso Baseado em Perfis (RBAC)**.
 
-## Perfis de acesso
+### Perfil: Gerente
+Possui acesso total a todas as ferramentas de gestão, usuários e auditoria.
+- **E-mail**: `admin@estoqueplus.com`
+- **Senha**: `admin123`
 
-### Gerente (Administrador)
+### Perfil: Operacional
+Possui acesso restrito apenas às operações básicas de estoque (consulta e movimentação).
+- **E-mail**: `operador@estoqueplus.com`
+- **Senha**: `operador123`
 
-Tem acesso completo ao sistema:
-- Dashboard
-- Produtos (cadastrar, editar, desativar)
-- Movimentações (registrar entrada e saída)
-- Usuários (cadastrar, ativar/desativar)
-- Relatórios (exportar CSV)
-- Auditoria (consultar logs)
+---
 
-### Operacional
+## 3. Funcionalidades Detalhadas
 
-Acesso restrito:
-- Dashboard
-- Produtos (somente consulta)
-- Movimentações (registrar entrada e saída)
+### 3.1. Dashboard (Visão Geral)
+A primeira tela ao logar apresenta um resumo crítico do negócio:
+- **Indicadores Rápidos**: Total de produtos, alertas de estoque baixo, volume de movimentações e usuários ativos.
+- **Movimentações Recentes**: Lista cronológica das últimas 5 ações de estoque.
+- **Alertas de Reposição**: Lista prioritária de produtos que atingiram o nível mínimo de segurança.
 
-O operacional **não** tem acesso a usuários, relatórios e auditoria, e **não** pode cadastrar, editar ou excluir produtos.
+### 3.2. Catálogo de Produtos
+Localizado no menu **Produtos**, permite a gestão do inventário:
+- **Busca Inteligente**: Filtre produtos por nome, SKU ou categoria instantaneamente.
+- **Alertas Visuais**: Produtos com estoque baixo são destacados com um ícone de alerta ⚠️.
+- **Gestão (Gerente)**: Apenas gerentes podem cadastrar novos produtos, editar informações existentes ou desativar itens do catálogo.
 
-## Funcionalidades
+### 3.3. Movimentações de Estoque
+A funcionalidade mais importante para o dia a dia:
+1.  Acesse o menu **Movimentações**.
+2.  Clique em **"Nova Movimentação"**.
+3.  Escolha o produto e o tipo (**Entrada** para reposição, **Saída** para vendas/baixas).
+4.  O sistema atualiza o saldo do produto automaticamente e gera um registro histórico.
+> **Nota**: O sistema bloqueia saídas que deixariam o saldo negativo.
 
-### Dashboard
+### 3.4. Relatórios e Exportação (Gerente)
+Para análise de dados e contabilidade:
+- Acesse o menu **Relatórios**.
+- Clique em **"Exportar CSV"**.
+- O sistema gera arquivos compatíveis com Excel e Google Sheets com codificação correta para nomes e acentos brasileiros.
 
-Tela inicial com resumo geral:
-- Total de produtos ativos
-- Quantidade de produtos com estoque baixo (abaixo do mínimo definido)
-- Total de movimentações registradas
-- Total de usuários ativos
-- Lista das movimentações mais recentes
-- Alertas de produtos com estoque baixo
+### 3.5. Gestão de Usuários (Gerente)
+Controle quem acessa o sistema:
+- Liste todos os colaboradores.
+- Ative ou desative acessos instantaneamente.
+- Defina as permissões de cada conta.
 
-### Produtos
+### 3.6. Auditoria (Gerente)
+Segurança e rastreabilidade:
+- Registro de **quem** fez, **o que** fez e **quando** fez.
+- Monitoramento de logins, entradas e saídas e alterações cadastrais.
 
-Lista todos os produtos cadastrados com nome, SKU, categoria, estoque, preço e status.
+---
 
-- Um **ícone de alerta** (triângulo amarelo/vermelho) aparece ao lado de produtos com estoque abaixo do mínimo
-- O campo de busca permite filtrar por nome, SKU ou categoria
-- O gerente pode:
-  - **Novo Produto:** cadastrar com nome, SKU, descrição, categoria, preço, quantidade inicial e estoque mínimo
-  - **Editar:** alterar dados do produto (ícone de lápis)
-  - **Desativar:** marcar produto como inativo (ícone de lixeira) — o produto não é apagado do banco
+## 4. Dicas de Uso
 
-### Movimentações
+- **Saída Segura**: Sempre utilize o botão **"Sair"** no menu lateral ao finalizar seu trabalho, especialmente em computadores compartilhados.
+- **Estoque Mínimo**: Configure bem o "Estoque Mínimo" de cada produto para que o sistema possa te avisar com antecedência quando for hora de comprar mais.
+- **Busca por SKU**: Use o leitor de código de barras no campo de busca para encontrar produtos rapidamente (se configurado com o SKU correto).
 
-Histórico de entradas e saídas de estoque.
-
-- É possível filtrar por tipo (Entrada / Saída)
-- Para registrar uma nova movimentação:
-  1. Clique em "Nova Movimentação"
-  2. Selecione o produto
-  3. Escolha o tipo (Entrada ou Saída)
-  4. Informe a quantidade
-  5. Adicione uma observação (opcional)
-  6. Clique em "Registrar Movimentação"
-
-A quantidade em estoque do produto é atualizada automaticamente. O sistema não permite saída maior que o estoque disponível.
-
-### Usuários (somente gerente)
-
-Lista os usuários cadastrados com nome, e-mail, perfil e status.
-
-- Para cadastrar um novo usuário, clique em "Novo Usuário" e preencha nome, e-mail, senha e perfil
-- Para ativar ou desativar um usuário, clique no ícone de ação na linha do usuário
-
-### Relatórios (somente gerente)
-
-Permite exportar dados em formato CSV:
-
-- **Relatório de Produtos:** exporta todos os produtos com nome, SKU, categoria, quantidade, estoque mínimo, preço e status
-- **Relatório de Movimentações:** exporta todas as movimentações com data, tipo, produto, quantidade, responsável e observação
-
-O arquivo CSV abre corretamente em Excel e LibreOffice (usa separador `;` e codificação UTF-8 com BOM).
-
-### Auditoria (somente gerente)
-
-Registra automaticamente as ações realizadas no sistema:
-
-- Login de usuário
-- Cadastro, edição e exclusão de produto
-- Entrada e saída de estoque
-- Cadastro e edição de usuário
-
-A listagem é paginada e mostra data/hora, tipo de ação, entidade afetada, detalhes e o usuário que realizou a ação.
-
-## Navegação
-
-O sistema usa um menu lateral (sidebar) à esquerda. O menu exibe apenas as opções disponíveis para o perfil do usuário logado.
-
-Para sair do sistema, clique em "Sair" no final do menu lateral.
-
-## Limitações desta versão (Iteração 1)
-
-- Não há recuperação de senha
-- Não há edição do próprio perfil
-- Não há filtros avançados nos relatórios (por data, categoria etc.)
-- A paginação existe apenas na auditoria
-- Não há gráficos no dashboard
-- Não há controle de sessões simultâneas
-- O sistema não envia notificações por e-mail
-
-Essas funcionalidades podem ser implementadas em iterações futuras.
+---
+*Estoque+ — Controle Total, Gestão Inteligente.*
