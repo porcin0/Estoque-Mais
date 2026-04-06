@@ -10,7 +10,7 @@ Pode ser acessada de duas formas:
 
 ### 1.1. Versão Online (Recomendado)
 A aplicação está hospedada na Vercel e pode ser acessada diretamente pelo navegador:
-> **URL:** [https://estoque-mais-porcin0.vercel.app/](https://estoque-mais-porcin0.vercel.app/)
+> **URL:** [https://estoque-mais-porcin0.vercel.app/](https://estoque-mais-porcin0.vercel.app/)](https://estoque-mais.vercel.app/login)
 
 ### 1.2. Instalação Local (Para Avaliação Técnica)
 Caso deseje rodar a aplicação em sua própria máquina, siga os passos abaixo:
