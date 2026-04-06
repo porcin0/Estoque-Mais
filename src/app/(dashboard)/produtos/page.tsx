@@ -32,7 +32,16 @@ export default function ProdutosPage() {
     const [excluindo, setExcluindo] = useState<string | null>(null);
     const [mensagem, setMensagem] = useState<{ tipo: "sucesso" | "erro"; texto: string } | null>(null);
 
+    const [isGerente, setIsGerente] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        const dados = localStorage.getItem("usuario");
+        if (dados) {
+            const usuario = JSON.parse(dados);
+            setIsGerente(usuario.role === "ADMIN");
+        }
+        setMounted(true);
         carregarProdutos();
     }, []);
 
@@ -78,14 +87,16 @@ export default function ProdutosPage() {
     return (
         <>
             <Header titulo="Produtos" subtitulo="Gerencie o catálogo de produtos">
-                <Link
-                    href="/produtos/novo"
-                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium
-            hover:bg-primary-700 transition-colors"
-                >
-                    <Plus className="w-4 h-4" />
-                    Novo Produto
-                </Link>
+                {(!mounted || isGerente) && (
+                    <Link
+                        href="/produtos/novo"
+                        className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium
+                hover:bg-primary-700 transition-colors"
+                    >
+                        <Plus className="w-4 h-4" />
+                        Novo Produto
+                    </Link>
+                )}
             </Header>
 
             {mensagem && (
@@ -131,7 +142,9 @@ export default function ProdutosPage() {
                                     <th className="text-right px-4 py-3 font-medium text-gray-600">Estoque</th>
                                     <th className="text-right px-4 py-3 font-medium text-gray-600">Preço</th>
                                     <th className="text-center px-4 py-3 font-medium text-gray-600">Status</th>
-                                    <th className="text-center px-4 py-3 font-medium text-gray-600">Ações</th>
+                                    {(!mounted || isGerente) && (
+                                        <th className="text-center px-4 py-3 font-medium text-gray-600">Ações</th>
+                                    )}
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
@@ -170,26 +183,28 @@ export default function ProdutosPage() {
                                                     {produto.ativo ? "Ativo" : "Inativo"}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3 text-center">
-                                                <div className="flex items-center justify-center gap-1">
-                                                    <button
-                                                        onClick={() => router.push(`/produtos/${produto.id}/editar`)}
-                                                        className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
-                                                        title="Editar"
-                                                    >
-                                                        <Pencil className="w-4 h-4" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => excluirProduto(produto.id)}
-                                                        disabled={excluindo === produto.id}
-                                                        className="p-1.5 text-gray-400 hover:text-danger-600 hover:bg-danger-50 rounded transition-colors
-                              disabled:opacity-50"
-                                                        title="Desativar"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            {(!mounted || isGerente) && (
+                                                <td className="px-4 py-3 text-center">
+                                                    <div className="flex items-center justify-center gap-1">
+                                                        <button
+                                                            onClick={() => router.push(`/produtos/${produto.id}/editar`)}
+                                                            className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+                                                            title="Editar"
+                                                        >
+                                                            <Pencil className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => excluirProduto(produto.id)}
+                                                            disabled={excluindo === produto.id}
+                                                            className="p-1.5 text-gray-400 hover:text-danger-600 hover:bg-danger-50 rounded transition-colors
+                                  disabled:opacity-50"
+                                                            title="Desativar"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            )}
                                         </tr>
                                     );
                                 })}
